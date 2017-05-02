@@ -3,8 +3,36 @@ package td.training.linkedinsenior;
 import java.util.Date;
 
 public class Programmer {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmacs(int emacs) {
+        this.emacs = emacs;
+    }
+
+    public void setCaffeine(int caffeine) {
+        this.caffeine = caffeine;
+    }
+
+    public void setRealProgrammerRating(int realProgrammerRating) {
+        this.realProgrammerRating = realProgrammerRating;
+    }
+
+    public void setInterviewDate(Date interviewDate) {
+        this.interviewDate = interviewDate;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     private String name;
     private int emacs;
+    private int caffeine;
+    private int realProgrammerRating;
+    private Date interviewDate;
+    private boolean favorite;
 
     public String getName() {
         return name;
@@ -30,8 +58,4 @@ public class Programmer {
         return favorite;
     }
 
-    private int caffeine;
-    private int realProgrammerRating;
-    private Date interviewDate;
-    private boolean favorite;
 }

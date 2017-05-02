@@ -27,12 +27,23 @@ public class ProgrammersListActivity extends AppCompatActivity {
             }
         });
 
+        initView();
+    }
+
+    private void initView() {
         RecyclerView programmersListView = (RecyclerView) findViewById(R.id.programmers_list_view);
-        ProgrammersListPresenter programmersListPresenter = new ProgrammersListPresenter();
-        ProgrammersListAdapter programmersListAdapter = new ProgrammersListAdapter(programmersListPresenter);
+
+        InMemoryRepo entityGateway = new InMemoryRepo();
+        ShowProgrammersListUseCase programmersListUseCase = new ShowProgrammersListUseCase(entityGateway);
+        ProgrammersListPresenter presenter = new ProgrammersListPresenter(programmersListUseCase);
+        programmersListUseCase.setPresenter(presenter);
+
+        ProgrammersListAdapter programmersListAdapter = new ProgrammersListAdapter(presenter);
 
         programmersListView.setLayoutManager(new LinearLayoutManager(this));
+        programmersListView.setAdapter(programmersListAdapter);
 
+        presenter.viewReady();
     }
 
 }

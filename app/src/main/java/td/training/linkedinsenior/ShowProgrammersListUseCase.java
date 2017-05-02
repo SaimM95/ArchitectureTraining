@@ -8,12 +8,11 @@ public class ShowProgrammersListUseCase {
     private EntityGateway entityGateway;
     private ProgrammerListPresentation presenter;
 
-    public ShowProgrammersListUseCase(EntityGateway entityGateway, ProgrammerListPresentation presenter) {
+    public ShowProgrammersListUseCase(EntityGateway entityGateway) {
         this.entityGateway = entityGateway;
-        this.presenter = presenter;
     }
 
-    public void showProgrammersList() {
+    public void showProgrammers() {
         // 1. grab data from persistance
         List<Programmer> programmers = entityGateway.fetchProgrammers();
 
@@ -22,6 +21,10 @@ public class ShowProgrammersListUseCase {
 
         // 3. pass it to presenter
         presenter.present(responses);
+    }
+
+    public void setPresenter(ProgrammerListPresentation presenter) {
+        this.presenter = presenter;
     }
 
     private List<ProgrammerResponse> processProgrammers(List<Programmer> programmers) {

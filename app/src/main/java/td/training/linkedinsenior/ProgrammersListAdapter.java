@@ -33,7 +33,8 @@ public class ProgrammersListAdapter extends RecyclerView.Adapter<ProgrammersList
 
     static class ProgrammerItemViewHolder extends RecyclerView.ViewHolder implements ProgrammerCellView {
 
-        private TextView programmerName, programmerInterviewDate;
+        private TextView programmerName;
+        private TextView programmerInterviewDate;
         private ToggleButton programmerFavoriteSwitch;
 
         public ProgrammerItemViewHolder(View itemView) {
@@ -48,17 +49,17 @@ public class ProgrammersListAdapter extends RecyclerView.Adapter<ProgrammersList
 
         @Override
         public void displayName(String name) {
-
+            programmerName.setText(name);
         }
 
         @Override
         public void displayInterviewDate(String date) {
-
+            programmerInterviewDate.setText(date);
         }
 
         @Override
         public void displayFavorite(boolean favorite) {
-
+            programmerFavoriteSwitch.setEnabled(favorite);
         }
     }
 }
