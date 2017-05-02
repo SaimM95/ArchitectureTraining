@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LinkedInSenior</string>
+    <string name="title_activity_programmers_list">ProgrammersListActivity</string>
+</resources>

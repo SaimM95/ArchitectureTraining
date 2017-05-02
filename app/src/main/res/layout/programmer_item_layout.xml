@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/name_text_view_programmer_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:text="Name"
+            tools:textColor="@android:color/holo_blue_bright"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:id="@+id/interview_date_programmer_item"
+            android:text="Today"/>
+    </LinearLayout>
+    <ToggleButton
+        android:id="@+id/favorite_toggle_button_programmer_item"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        style="@style/favoriteToggleButton"
+        android:backgroundTint="@color/colorPrimary"
+        android:background="@drawable/favorite_toggle_selector"
+        android:clickable="false"
+        android:layout_weight="0"
+        />
+
+</LinearLayout>
