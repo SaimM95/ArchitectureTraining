@@ -1,13 +1,17 @@
 package td.training.linkedinsenior;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class ShowProgrammersListUseCase {
 
     private EntityGateway entityGateway;
-    private ProgrammerListPresentation presenter;
+    private WeakReference<ProgrammerListPresentation> presenter;
 
+    @Inject
     public ShowProgrammersListUseCase(EntityGateway entityGateway) {
         this.entityGateway = entityGateway;
     }
@@ -20,11 +24,13 @@ public class ShowProgrammersListUseCase {
         List<ProgrammerResponse> responses = processProgrammers(programmers);
 
         // 3. pass it to presenter
-        presenter.present(responses);
+        if (presenter.get() != null) {
+            presenter.get().present(responses);
+        }
     }
 
     public void setPresenter(ProgrammerListPresentation presenter) {
-        this.presenter = presenter;
+        this.presenter = new WeakReference<>(presenter);
     }
 
     private List<ProgrammerResponse> processProgrammers(List<Programmer> programmers) {

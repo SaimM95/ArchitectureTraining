@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">LinkedInSenior</string>
     <string name="title_activity_programmers_list">ProgrammersListActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_programmer_detail">Programmer</string>
+    <string name="title_activity_programmer_edit_new">New</string>
+    <string name="title_activity_programmer_edit_edit">Edit</string>
+    <string name="name_title">Name</string>
+    <string name="emacs_title">Emacs Knowledge</string>
+    <string name="caffeine_title">Caffeine Ingestion</string>
+    <string name="rpr_title">Real Programmer Rating</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="confirm_delete_programmer">Do you really want to delete this programmer info?</string>
+    <string name="confirm_title">Confirm deletion</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="confirm_discard_changes">Do you really want to discard the changes?</string>
+    <string name="dont_discard">Keep editing</string>
+    <string name="name_edit_text_hint_programmer_edit">Programmer Name</string>
 </resources>

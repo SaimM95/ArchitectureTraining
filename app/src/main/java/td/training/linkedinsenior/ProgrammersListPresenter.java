@@ -1,16 +1,26 @@
 package td.training.linkedinsenior;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ProgrammersListPresenter implements ProgrammerListPresentation {
 
     private List<ProgrammerResponse> programmers;
+    private WeakReference<ProgrammersListView> view;
+
     private ShowProgrammersListUseCase programmersListUseCase;
 
+    @Inject
     public ProgrammersListPresenter(ShowProgrammersListUseCase programmersListUseCase) {
         this.programmersListUseCase = programmersListUseCase;
+    }
+
+    public void setProgrammersListView(ProgrammersListView view) {
+        this.view = new WeakReference<>(view);
     }
 
     @Override
@@ -34,6 +44,12 @@ public class ProgrammersListPresenter implements ProgrammerListPresentation {
         view.displayName(name);
         view.displayInterviewDate(interviewDate);
         view.displayFavorite(favorite);
+    }
+
+    public void performFabAction() {
+        if (view.get() != null) {
+            view.get().navigateToNewProgrammerActivity();
+        }
     }
 
     private String formatDate(Date date) {
