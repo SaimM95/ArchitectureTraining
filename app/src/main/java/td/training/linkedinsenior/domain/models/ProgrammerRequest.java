@@ -1,5 +1,6 @@
 package td.training.linkedinsenior.domain.models;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Observable;
 
@@ -32,6 +33,18 @@ public class ProgrammerRequest extends Observable {
         realProgrammerRating = programmer.getRealProgrammerRating();
         interviewDate = programmer.getInterviewDate();
         favorite = programmer.isFavorite();
+    }
+
+    public Programmer generateProgrammer() {
+        Programmer programmer = new Programmer();
+        programmer.setName(name);
+        programmer.setEmacs(emacs);
+        programmer.setCaffeine(caffeine);
+        programmer.setRealProgrammerRating(realProgrammerRating);
+        programmer.setInterviewDate(Calendar.getInstance().getTime());
+        programmer.setFavorite(favorite);
+
+        return programmer;
     }
 
     public void setName(String name) {

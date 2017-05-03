@@ -13,17 +13,21 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import td.training.linkedinsenior.R;
-import td.training.linkedinsenior.platform.dependency_injection.NewProgrammerConnector;
+import td.training.linkedinsenior.platform.dependency_injection.DaggerEntityGatewayComponent;
+import td.training.linkedinsenior.platform.dependency_injection.DaggerNewProgrammerComponent;
+import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayComponent;
+import td.training.linkedinsenior.platform.dependency_injection.NewProgrammerModule;
 import td.training.linkedinsenior.presentation.presenters.NewProgrammerPresenter;
 import td.training.linkedinsenior.presentation.presenters.NewProgrammerView;
 
+import javax.inject.Inject;
+
 public class NewProgrammerActivity extends AppCompatActivity implements NewProgrammerView {
 
-    private NewProgrammerPresenter presenter;
+    @Inject NewProgrammerPresenter presenter;
 
     // Views
     private EditText mNameEditText;
@@ -50,8 +54,18 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
     }
 
     private void initDependencies() {
-        NewProgrammerConnector connector = new NewProgrammerConnector();
-        connector.inject(this);
+//        NewProgrammerConnector connector = new NewProgrammerConnector();
+//        connector.inject(this);
+
+        EntityGatewayComponent entityGateway = DaggerEntityGatewayComponent.builder()
+            .build();
+
+        DaggerNewProgrammerComponent.builder()
+            .newProgrammerModule(new NewProgrammerModule())
+            .entityGatewayComponent(entityGateway)
+            .build()
+            .inject(this);
+
         presenter.setView(this);
     }
 
@@ -78,7 +92,7 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
         boolean processed = false;
         switch (item.getItemId()) {
             case R.id.menu_item_save:
-//                presenter.save();
+                presenter.save();
                 processed = true;
                 break;
             case android.R.id.home:
@@ -207,6 +221,12 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
 
     @Override
     public void setRealProgrammerRating(int rating) {
-        mRprRatingBar.setProgress(rating);
+        // +1 to convert 0-4 to 1-5
+        mRprRatingBar.setProgress(rating+1);
+    }
+
+    @Override
+    public void setFavorite(boolean favorite) {
+        mFavoriteToggleButton.setEnabled(favorite);
     }
 }

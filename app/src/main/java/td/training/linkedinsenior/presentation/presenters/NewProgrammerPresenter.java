@@ -11,21 +11,19 @@ import java.lang.ref.WeakReference;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.inject.Inject;
+
 public class NewProgrammerPresenter implements Observer {
 
     private SaveProgrammerUseCase useCase;
     private WeakReference<NewProgrammerView> view;
     private ProgrammerRequest mProgrammerRequest;
 
-    private final int DEFAULT_CAFFEINE = 2;
-    private final int DEFAULT_EMACS = 2;
-
+    @Inject
     public NewProgrammerPresenter(SaveProgrammerUseCase useCase) {
         this.useCase = useCase;
 
         mProgrammerRequest = new ProgrammerRequest();
-        mProgrammerRequest.setCaffeine(DEFAULT_CAFFEINE);
-        mProgrammerRequest.setEmacs(DEFAULT_EMACS);
         mProgrammerRequest.addObserver(this);
     }
 
@@ -66,6 +64,7 @@ public class NewProgrammerPresenter implements Observer {
             String name = mProgrammerRequest.getName();
             view.get().updateSaveButton(name != null && !TextUtils.isEmpty(name));
             view.get().setRealProgrammerRating(mProgrammerRequest.getRealProgrammerRating());
+            view.get().setFavorite(mProgrammerRequest.isFavorite());
 
         }
     }

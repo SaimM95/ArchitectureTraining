@@ -5,4 +5,5 @@ public interface NewProgrammerView {
     void setCaffeine(int caffeine);
     void setEmacs(int emacs);
     void setRealProgrammerRating(int rating);
+    void setFavorite(boolean favorite);
 }

@@ -23,6 +23,11 @@ public class InMemoryRepo implements EntityGateway {
         return programmers;
     }
 
+    @Override
+    public void createNewProgrammer(Programmer programmer) {
+        programmers.add(programmer);
+    }
+
     private Programmer createProgrammer(String name, int emacs, int caffeine, int realProgrammerRating, Date interviewDate, boolean favorite) {
         Programmer programmer = new Programmer();
         programmer.setName(name);
