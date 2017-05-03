@@ -1,4 +1,4 @@
-package td.training.linkedinsenior;
+package td.training.linkedinsenior.platform.dependency_injection;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

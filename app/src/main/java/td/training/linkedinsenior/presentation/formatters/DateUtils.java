@@ -1,4 +1,4 @@
-package td.training.linkedinsenior;
+package td.training.linkedinsenior.presentation.formatters;
 
 import java.util.Date;
 

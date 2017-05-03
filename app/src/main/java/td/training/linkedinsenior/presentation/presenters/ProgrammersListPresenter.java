@@ -1,4 +1,9 @@
-package td.training.linkedinsenior;
+package td.training.linkedinsenior.presentation.presenters;
+
+import td.training.linkedinsenior.domain.models.ProgrammerResponse;
+import td.training.linkedinsenior.domain.ProgrammerListPresentation;
+import td.training.linkedinsenior.domain.use_cases.ShowProgrammersListUseCase;
+import td.training.linkedinsenior.presentation.formatters.DateUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;

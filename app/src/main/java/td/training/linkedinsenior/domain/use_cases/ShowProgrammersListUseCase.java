@@ -1,4 +1,9 @@
-package td.training.linkedinsenior;
+package td.training.linkedinsenior.domain.use_cases;
+
+import td.training.linkedinsenior.domain.EntityGateway;
+import td.training.linkedinsenior.domain.models.Programmer;
+import td.training.linkedinsenior.domain.ProgrammerListPresentation;
+import td.training.linkedinsenior.domain.models.ProgrammerResponse;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

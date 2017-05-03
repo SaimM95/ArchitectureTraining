@@ -1,4 +1,4 @@
-package td.training.linkedinsenior;
+package td.training.linkedinsenior.domain.models;
 
 import java.util.Date;
 

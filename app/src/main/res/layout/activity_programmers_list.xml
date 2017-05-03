@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="td.training.linkedinsenior.ProgrammersListActivity">
+    tools:context="td.training.linkedinsenior.platform.views.ProgrammersListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

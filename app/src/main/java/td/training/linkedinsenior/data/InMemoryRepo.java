@@ -1,4 +1,7 @@
-package td.training.linkedinsenior;
+package td.training.linkedinsenior.data;
+
+import td.training.linkedinsenior.domain.EntityGateway;
+import td.training.linkedinsenior.domain.models.Programmer;
 
 import java.util.ArrayList;
 import java.util.Calendar;

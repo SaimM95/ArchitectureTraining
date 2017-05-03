@@ -1,7 +1,10 @@
-package td.training.linkedinsenior;
+package td.training.linkedinsenior.platform.dependency_injection;
 
 import dagger.Module;
 import dagger.Provides;
+import td.training.linkedinsenior.domain.EntityGateway;
+import td.training.linkedinsenior.domain.use_cases.ShowProgrammersListUseCase;
+import td.training.linkedinsenior.presentation.presenters.ProgrammersListPresenter;
 
 @Module
 public class ProgrammersListModule {
@@ -12,7 +15,8 @@ public class ProgrammersListModule {
         return presenter;
     }
 
-    @Provides ShowProgrammersListUseCase providesShowProgrammersListUseCase(EntityGateway entityGateway) {
+    @Provides
+    ShowProgrammersListUseCase providesShowProgrammersListUseCase(EntityGateway entityGateway) {
         return new ShowProgrammersListUseCase(entityGateway);
     }
 
