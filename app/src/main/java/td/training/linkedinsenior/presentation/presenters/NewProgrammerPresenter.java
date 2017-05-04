@@ -64,8 +64,6 @@ public class NewProgrammerPresenter implements Observer {
             String name = mProgrammerRequest.getName();
             view.get().updateSaveButton(name != null && !TextUtils.isEmpty(name));
             view.get().setRealProgrammerRating(mProgrammerRequest.getRealProgrammerRating());
-            view.get().setFavorite(mProgrammerRequest.isFavorite());
-
         }
     }
 }

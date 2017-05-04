@@ -2,7 +2,10 @@ package td.training.linkedinsenior.platform.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +23,7 @@ import td.training.linkedinsenior.platform.dependency_injection.DaggerEntityGate
 import td.training.linkedinsenior.platform.dependency_injection.DaggerNewProgrammerComponent;
 import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayComponent;
 import td.training.linkedinsenior.platform.dependency_injection.NewProgrammerModule;
+import td.training.linkedinsenior.presentation.formatters.RatingColor;
 import td.training.linkedinsenior.presentation.presenters.NewProgrammerPresenter;
 import td.training.linkedinsenior.presentation.presenters.NewProgrammerView;
 
@@ -27,11 +31,13 @@ import javax.inject.Inject;
 
 public class NewProgrammerActivity extends AppCompatActivity implements NewProgrammerView {
 
-    @Inject NewProgrammerPresenter presenter;
+    @Inject
+    NewProgrammerPresenter presenter;
 
     // Views
     private EditText mNameEditText;
     private ToggleButton mFavoriteToggleButton;
+    private CompoundButton.OnCheckedChangeListener mFavoriteCheckedChangeListener;
     private SeekBar mEmacsSeekBar;
     private TextView mEmacsTextView;
     private SeekBar mCaffeineSeekBar;
@@ -54,8 +60,8 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
     }
 
     private void initDependencies() {
-//        NewProgrammerConnector connector = new NewProgrammerConnector();
-//        connector.inject(this);
+        //        NewProgrammerConnector connector = new NewProgrammerConnector();
+        //        connector.inject(this);
 
         EntityGatewayComponent entityGateway = DaggerEntityGatewayComponent.builder()
             .build();
@@ -141,13 +147,16 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
     }
 
     private void prepareFavoriteToggleButton() {
-        mFavoriteToggleButton = (ToggleButton) findViewById(R.id.favorite_toggle_button_programmer_edit);
-        mFavoriteToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mFavoriteToggleButton = (ToggleButton)findViewById(R.id.favorite_toggle_button_programmer_edit);
+        mFavoriteToggleButton.setEnabled(true);
+        //        mFavoriteToggleButton.setChecked(true);
+        mFavoriteCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 presenter.updateFavorite(b);
             }
-        });
+        };
+        mFavoriteToggleButton.setOnCheckedChangeListener(mFavoriteCheckedChangeListener);
     }
 
     private void prepareEmacsSeekBar() {
@@ -222,11 +231,8 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
     @Override
     public void setRealProgrammerRating(int rating) {
         // +1 to convert 0-4 to 1-5
-        mRprRatingBar.setProgress(rating+1);
-    }
-
-    @Override
-    public void setFavorite(boolean favorite) {
-        mFavoriteToggleButton.setEnabled(favorite);
+        mRprRatingBar.setProgress(rating + 1);
+        LayerDrawable stars = (LayerDrawable)mRprRatingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(RatingColor.getColor(rating), PorterDuff.Mode.SRC_ATOP);
     }
 }

@@ -63,7 +63,7 @@ public class ProgrammersListAdapter extends RecyclerView.Adapter<ProgrammersList
 
         @Override
         public void displayFavorite(boolean favorite) {
-            programmerFavoriteSwitch.setEnabled(favorite);
+            programmerFavoriteSwitch.setChecked(favorite);
         }
     }
 }

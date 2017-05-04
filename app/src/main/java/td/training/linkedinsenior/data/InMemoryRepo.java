@@ -11,11 +11,13 @@ import java.util.List;
 public class InMemoryRepo implements EntityGateway {
 
     private List<Programmer> programmers;
+    private final long ONE_DAY = 24 * 60 * 60 * 1000;
 
     public InMemoryRepo() {
         programmers = new ArrayList<>();
         programmers.add(createProgrammer("Bob", 2, 3, 8, Calendar.getInstance().getTime(), false));
-        programmers.add(createProgrammer("Alice", 6, 6, 8, Calendar.getInstance().getTime(), true));
+        Date yesterday = new Date(Calendar.getInstance().getTime().getTime() - ONE_DAY);
+        programmers.add(createProgrammer("Alice", 6, 6, 8, yesterday, true));
     }
 
     @Override
