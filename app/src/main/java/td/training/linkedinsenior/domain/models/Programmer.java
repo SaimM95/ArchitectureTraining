@@ -27,6 +27,16 @@ public class Programmer {
         this.favorite = favorite;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    private String id;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private String name;
     private int emacs;
     private int caffeine;

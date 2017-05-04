@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import td.training.linkedinsenior.R;
+import td.training.linkedinsenior.platform.ApplicationServiceLocator;
 import td.training.linkedinsenior.platform.dependency_injection.DaggerEntityGatewayComponent;
 import td.training.linkedinsenior.platform.dependency_injection.DaggerNewProgrammerComponent;
 import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayComponent;
@@ -63,12 +63,11 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
         //        NewProgrammerConnector connector = new NewProgrammerConnector();
         //        connector.inject(this);
 
-        EntityGatewayComponent entityGateway = DaggerEntityGatewayComponent.builder()
-            .build();
+        ApplicationServiceLocator serviceProvider = (ApplicationServiceLocator)getApplication();
 
         DaggerNewProgrammerComponent.builder()
             .newProgrammerModule(new NewProgrammerModule())
-            .entityGatewayComponent(entityGateway)
+            .entityGatewayComponent(serviceProvider.getEntityGatewayComponent())
             .build()
             .inject(this);
 
@@ -99,6 +98,9 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
         switch (item.getItemId()) {
             case R.id.menu_item_save:
                 presenter.save();
+                // close activity after clicking save
+                setResult(999);
+                finish();
                 processed = true;
                 break;
             case android.R.id.home:
@@ -111,8 +113,8 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
         return (processed || super.onOptionsItemSelected(item));
     }
 
-    public static void open(Activity from) {
-        from.startActivity(new Intent(from, NewProgrammerActivity.class));
+    public static void openForResult(Activity from, int requestCode) {
+        from.startActivityForResult(new Intent(from, NewProgrammerActivity.class), requestCode);
     }
 
     // Prepare views

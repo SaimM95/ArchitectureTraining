@@ -7,14 +7,14 @@ import td.training.linkedinsenior.presentation.presenters.NewProgrammerPresenter
 
 public class NewProgrammerConnector {
 
-    public void inject(NewProgrammerActivity activity) {
-        InMemoryRepo entityGateway = new InMemoryRepo();
-        SaveProgrammerUseCase useCase = new SaveProgrammerUseCase(entityGateway);
-
-        NewProgrammerPresenter presenter = new NewProgrammerPresenter(useCase);
-//        useCase.setPresenter(presenter);
-        presenter.setView(activity);
-
-        activity.setPresenter(presenter);
-    }
+//    public void inject(NewProgrammerActivity activity) {
+//        InMemoryRepo entityGateway = new InMemoryRepo();
+//        SaveProgrammerUseCase useCase = new SaveProgrammerUseCase(entityGateway);
+//
+//        NewProgrammerPresenter presenter = new NewProgrammerPresenter(useCase);
+////        useCase.setPresenter(presenter);
+//        presenter.setView(activity);
+//
+//        activity.setPresenter(presenter);
+//    }
 }

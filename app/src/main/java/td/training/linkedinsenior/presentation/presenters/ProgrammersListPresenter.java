@@ -9,15 +9,18 @@ import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.inject.Inject;
 
-public class ProgrammersListPresenter implements ProgrammerListPresentation {
+public class ProgrammersListPresenter implements ProgrammerListPresentation, Observer {
 
     private List<ProgrammerResponse> programmers;
     private WeakReference<ProgrammersListView> view;
 
     private ShowProgrammersListUseCase programmersListUseCase;
+    private String mSelectedId;
 
     @Inject
     public ProgrammersListPresenter(ShowProgrammersListUseCase programmersListUseCase) {
@@ -31,6 +34,9 @@ public class ProgrammersListPresenter implements ProgrammerListPresentation {
     @Override
     public void present(List<ProgrammerResponse> programmerResponses) {
         programmers = programmerResponses;
+        if (view.get() != null) {
+            view.get().refreshList();
+        }
     }
 
     public void viewReady() {
@@ -57,8 +63,34 @@ public class ProgrammersListPresenter implements ProgrammerListPresentation {
         }
     }
 
+    public void select(int itemPosition) {
+        ProgrammersListView mView = view.get();
+        if (mView != null) {
+            if ((itemPosition >= 0) && (itemPosition < programmers.size())) {
+                ProgrammerResponse programmer = programmers.get(itemPosition);
+                mSelectedId = programmer.getId();
+                mView.navigateToProgrammerDetail();
+            } else {
+                mSelectedId = null;
+            }
+        }
+    }
+
+    public String getId() {
+        return mSelectedId;
+    }
+
     private String formatDate(Date date) {
         DateUtils dateUtils = new DateUtils(date);
         return dateUtils.formatDate(Calendar.getInstance().getTime());
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
+
+    public void notifyProgrammersListChanged() {
+
     }
 }

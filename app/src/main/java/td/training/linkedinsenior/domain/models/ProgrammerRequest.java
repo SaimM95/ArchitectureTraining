@@ -35,8 +35,9 @@ public class ProgrammerRequest extends Observable {
         favorite = programmer.isFavorite();
     }
 
-    public Programmer generateProgrammer() {
+    public Programmer generateProgrammer(String id) {
         Programmer programmer = new Programmer();
+        programmer.setId(id);
         programmer.setName(name);
         programmer.setEmacs(emacs);
         programmer.setCaffeine(caffeine);

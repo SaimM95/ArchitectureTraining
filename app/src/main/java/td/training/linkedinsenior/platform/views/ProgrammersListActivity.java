@@ -1,5 +1,6 @@
 package td.training.linkedinsenior.platform.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,9 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import td.training.linkedinsenior.platform.ApplicationServiceLocator;
+import td.training.linkedinsenior.platform.RealProgrammerApplication;
 import td.training.linkedinsenior.platform.dependency_injection.DaggerEntityGatewayComponent;
 import td.training.linkedinsenior.platform.dependency_injection.DaggerProgrammersListComponent;
 import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayComponent;
+import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayModule;
 import td.training.linkedinsenior.platform.dependency_injection.ProgrammersListConnector;
 import td.training.linkedinsenior.platform.dependency_injection.ProgrammersListModule;
 import td.training.linkedinsenior.presentation.presenters.ProgrammersListPresenter;
@@ -26,6 +30,7 @@ public class ProgrammersListActivity extends AppCompatActivity implements Progra
     ProgrammersListPresenter presenter;
 
     private ProgrammersListConnector connector;
+    private RecyclerView programmersListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +72,11 @@ public class ProgrammersListActivity extends AppCompatActivity implements Progra
     private void initDependencies() {
         connector = new ProgrammersListConnector();
 
-        EntityGatewayComponent entityGateway = DaggerEntityGatewayComponent.builder()
-            .build();
+        ApplicationServiceLocator serviceProvider = (ApplicationServiceLocator)getApplication();
 
         DaggerProgrammersListComponent.builder()
             .programmersListModule(new ProgrammersListModule())
-            .entityGatewayComponent(entityGateway)
+            .entityGatewayComponent(serviceProvider.getEntityGatewayComponent())
             .build()
             .inject(this);
 
@@ -86,11 +90,31 @@ public class ProgrammersListActivity extends AppCompatActivity implements Progra
 
         presenter.viewReady();
 
-        RecyclerView programmersListView = (RecyclerView)findViewById(R.id.programmers_list_view);
-        ProgrammersListAdapter programmersListAdapter = new ProgrammersListAdapter(presenter);
+        programmersListView = (RecyclerView)findViewById(R.id.programmers_list_view);
+        final ProgrammersListAdapter programmersListAdapter = new ProgrammersListAdapter(presenter);
 
         programmersListView.setLayoutManager(new LinearLayoutManager(this));
         programmersListView.setAdapter(programmersListAdapter);
+
+        programmersListView.addOnItemTouchListener(
+            new RecyclerItemClickListener(this, programmersListView, new RecyclerItemClickListener.OnItemClickListener() {
+                @Override public void onItemClick(View view, int position) {
+                    presenter.select(position);
+                }
+
+                @Override public void onLongItemClick(View view, int position) {
+                }
+            })
+        );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 999) {
+            presenter.viewReady();
+        }
     }
 
     public void setPresenter(ProgrammersListPresenter presenter) {
@@ -100,5 +124,17 @@ public class ProgrammersListActivity extends AppCompatActivity implements Progra
     @Override
     public void navigateToNewProgrammerActivity() {
         connector.openNewProgrammerActivity(this);
+    }
+
+    @Override
+    public void navigateToProgrammerDetail() {
+        connector.openProgrammerDetailActivity(this, presenter.getId());
+    }
+
+    @Override
+    public void refreshList() {
+        if (programmersListView != null) {
+            programmersListView.getAdapter().notifyDataSetChanged();
+        }
     }
 }
