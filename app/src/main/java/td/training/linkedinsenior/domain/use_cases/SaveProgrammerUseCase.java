@@ -2,25 +2,27 @@ package td.training.linkedinsenior.domain.use_cases;
 
 import td.training.linkedinsenior.domain.EntityGateway;
 import td.training.linkedinsenior.domain.IdentityGenerator;
+import td.training.linkedinsenior.domain.UseCase;
 import td.training.linkedinsenior.domain.models.Programmer;
 import td.training.linkedinsenior.domain.models.ProgrammerRequest;
 import td.training.linkedinsenior.domain.models.UUIDIdentityGenerator;
 
+import java.lang.ref.WeakReference;
+
 import javax.inject.Inject;
 
-public class SaveProgrammerUseCase {
+public class SaveProgrammerUseCase implements UseCase {
 
-    private EntityGateway entityGateway;
+    @Inject EntityGateway entityGateway;
     private IdentityGenerator mIdentityGenerator;
+    private ProgrammerRequest mProgrammerRequest;
+    private WeakReference<CompletionHandler> mHandler;
 
-    @Inject
-    public SaveProgrammerUseCase(EntityGateway entityGateway) {
+    public SaveProgrammerUseCase(EntityGateway entityGateway, ProgrammerRequest programmerRequest, CompletionHandler
+        handler) {
         this.entityGateway = entityGateway;
-    }
-
-    public void save(ProgrammerRequest programmerRequest) {
-        Programmer programmer = programmerRequest.generateProgrammer(identityGenerator().getId());
-        entityGateway.createNewProgrammer(programmer);
+        mProgrammerRequest = programmerRequest;
+        mHandler = new WeakReference<>(handler);
     }
 
     private IdentityGenerator identityGenerator() {
@@ -28,5 +30,14 @@ public class SaveProgrammerUseCase {
             mIdentityGenerator = new UUIDIdentityGenerator();
         }
         return mIdentityGenerator;
+    }
+
+    @Override
+    public void execute() {
+        Programmer programmer = mProgrammerRequest.generateProgrammer(identityGenerator().getId());
+        entityGateway.createNewProgrammer(programmer);
+        if (mHandler.get() != null) {
+            mHandler.get().handleCompletion();
+        }
     }
 }

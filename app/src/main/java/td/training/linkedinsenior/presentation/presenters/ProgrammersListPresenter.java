@@ -1,8 +1,8 @@
 package td.training.linkedinsenior.presentation.presenters;
 
+import td.training.linkedinsenior.domain.UseCase;
 import td.training.linkedinsenior.domain.models.ProgrammerResponse;
-import td.training.linkedinsenior.domain.ProgrammerListPresentation;
-import td.training.linkedinsenior.domain.use_cases.ShowProgrammersListUseCase;
+import td.training.linkedinsenior.domain.UseCaseFactory;
 import td.training.linkedinsenior.presentation.formatters.DateUtils;
 
 import java.lang.ref.WeakReference;
@@ -14,33 +14,28 @@ import java.util.Observer;
 
 import javax.inject.Inject;
 
-public class ProgrammersListPresenter implements ProgrammerListPresentation, Observer {
+public class ProgrammersListPresenter implements Observer, UseCase.MultipleProgrammerResponseHandler {
 
     private List<ProgrammerResponse> programmers;
     private WeakReference<ProgrammersListView> view;
 
-    private ShowProgrammersListUseCase programmersListUseCase;
+    private UseCaseFactory useCase;
+    private UseCase showProgrammersUseCase;
     private String mSelectedId;
 
     @Inject
-    public ProgrammersListPresenter(ShowProgrammersListUseCase programmersListUseCase) {
-        this.programmersListUseCase = programmersListUseCase;
+    public ProgrammersListPresenter(UseCaseFactory useCase) {
+        this.useCase = useCase;
     }
 
     public void setProgrammersListView(ProgrammersListView view) {
         this.view = new WeakReference<>(view);
     }
 
-    @Override
-    public void present(List<ProgrammerResponse> programmerResponses) {
-        programmers = programmerResponses;
-        if (view.get() != null) {
-            view.get().refreshList();
-        }
-    }
-
     public void viewReady() {
-        programmersListUseCase.showProgrammers();
+        // Can pass in a lambda function instead of "this" then we don't have to handle the callback in the presenter
+        showProgrammersUseCase = useCase.showProgrammersListUseCase(this);
+        showProgrammersUseCase.execute();
     }
 
     public int getNumberOfProgrammers() {
@@ -90,7 +85,22 @@ public class ProgrammersListPresenter implements ProgrammerListPresentation, Obs
 
     }
 
-    public void notifyProgrammersListChanged() {
+    @Override
+    public void handleMultipleProgrammerResponses(List<ProgrammerResponse> programmers) {
+        this.programmers = programmers;
+        if (view.get() != null) {
+            view.get().refreshList();
+        }
 
+        // Reset the usecase
+        showProgrammersUseCase = null;
     }
+
+    //    @Override
+//    public void handleMultipleProgrammerResponses(List<ProgrammerResponse> programmers) {
+//        this.programmers = programmers;
+//        if (view.get() != null) {
+//            view.get().refreshList();
+//        }
+//    }
 }

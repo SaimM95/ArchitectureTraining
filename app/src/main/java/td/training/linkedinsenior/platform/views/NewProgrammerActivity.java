@@ -60,16 +60,8 @@ public class NewProgrammerActivity extends AppCompatActivity implements NewProgr
     }
 
     private void initDependencies() {
-        //        NewProgrammerConnector connector = new NewProgrammerConnector();
-        //        connector.inject(this);
-
         ApplicationServiceLocator serviceProvider = (ApplicationServiceLocator)getApplication();
-
-        DaggerNewProgrammerComponent.builder()
-            .newProgrammerModule(new NewProgrammerModule())
-            .entityGatewayComponent(serviceProvider.getEntityGatewayComponent())
-            .build()
-            .inject(this);
+        serviceProvider.getNewProgrammerComponent().inject(this);
 
         presenter.setView(this);
     }

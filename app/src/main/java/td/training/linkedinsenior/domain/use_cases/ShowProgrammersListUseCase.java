@@ -1,8 +1,8 @@
 package td.training.linkedinsenior.domain.use_cases;
 
 import td.training.linkedinsenior.domain.EntityGateway;
+import td.training.linkedinsenior.domain.UseCase;
 import td.training.linkedinsenior.domain.models.Programmer;
-import td.training.linkedinsenior.domain.ProgrammerListPresentation;
 import td.training.linkedinsenior.domain.models.ProgrammerResponse;
 
 import java.lang.ref.WeakReference;
@@ -11,31 +11,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ShowProgrammersListUseCase {
+public class ShowProgrammersListUseCase implements UseCase {
 
-    private EntityGateway entityGateway;
-    private WeakReference<ProgrammerListPresentation> presenter;
+    @Inject EntityGateway entityGateway;
+    private WeakReference<MultipleProgrammerResponseHandler> mHandler;
 
-    @Inject
-    public ShowProgrammersListUseCase(EntityGateway entityGateway) {
+    public ShowProgrammersListUseCase(EntityGateway entityGateway, MultipleProgrammerResponseHandler handler) {
         this.entityGateway = entityGateway;
-    }
-
-    public void showProgrammers() {
-        // 1. grab data from persistance
-        List<Programmer> programmers = entityGateway.fetchProgrammers();
-
-        // 2. process data
-        List<ProgrammerResponse> responses = processProgrammers(programmers);
-
-        // 3. pass it to presenter
-        if (presenter.get() != null) {
-            presenter.get().present(responses);
-        }
-    }
-
-    public void setPresenter(ProgrammerListPresentation presenter) {
-        this.presenter = new WeakReference<>(presenter);
+        mHandler = new WeakReference<>(handler);
     }
 
     private List<ProgrammerResponse> processProgrammers(List<Programmer> programmers) {
@@ -44,5 +27,19 @@ public class ShowProgrammersListUseCase {
             responses.add(new ProgrammerResponse(programmer));
         }
         return responses;
+    }
+
+    @Override
+    public void execute() {
+        // 1. grab data from persistance
+        List<Programmer> programmers = entityGateway.fetchProgrammers();
+
+        // 2. process data
+        List<ProgrammerResponse> responses = processProgrammers(programmers);
+
+        // 3. pass it to presenter
+        if (mHandler.get() != null) {
+            mHandler.get().handleMultipleProgrammerResponses(responses);
+        }
     }
 }

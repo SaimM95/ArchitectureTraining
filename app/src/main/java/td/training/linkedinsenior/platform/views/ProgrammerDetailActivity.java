@@ -15,10 +15,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import td.training.linkedinsenior.R;
-import td.training.linkedinsenior.platform.dependency_injection.DaggerEntityGatewayComponent;
-import td.training.linkedinsenior.platform.dependency_injection.DaggerProgrammerDetailComponent;
-import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayComponent;
-import td.training.linkedinsenior.platform.dependency_injection.ProgrammerDetailModule;
+import td.training.linkedinsenior.platform.ApplicationServiceLocator;
 import td.training.linkedinsenior.presentation.presenters.ProgrammerDetailPresenter;
 import td.training.linkedinsenior.presentation.presenters.ProgrammerDetailView;
 
@@ -42,7 +39,7 @@ public class ProgrammerDetailActivity extends AppCompatActivity implements Progr
         setSupportActionBar(toolbar);
 
         wireUpViews();
-        assembleModule();
+//        assembleModule();
         injectDependencies();
 
         if (presenter != null) {
@@ -51,22 +48,19 @@ public class ProgrammerDetailActivity extends AppCompatActivity implements Progr
     }
 
     private void injectDependencies() {
-        EntityGatewayComponent entityGateway = DaggerEntityGatewayComponent.builder()
-            .build();
-
-        DaggerProgrammerDetailComponent.builder()
-            .programmerDetailModule(new ProgrammerDetailModule(presenter.getId()))
-            .entityGatewayComponent(entityGateway)
-            .build()
-            .inject(this);
-    }
-
-    private void assembleModule() {
         String id = getIntent().getStringExtra(EXTRA_PROGRAMMER_ID);
-        if (id != null) {
-            Toast.makeText(this, "Id is " + id, Toast.LENGTH_SHORT).show();
-        }
+        ApplicationServiceLocator serviceProvider = (ApplicationServiceLocator)getApplication();
+        serviceProvider.getProgrammerDetailComponent(id).inject(this);
+
+        presenter.setView(this);
     }
+
+//    private void assembleModule() {
+//        String id = getIntent().getStringExtra(EXTRA_PROGRAMMER_ID);
+//        if (id != null) {
+//            Toast.makeText(this, "Id is " + id, Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     public static void open(Activity from, Intent intent) {
         from.startActivity(intent);
@@ -113,11 +107,11 @@ public class ProgrammerDetailActivity extends AppCompatActivity implements Progr
     }
 
     @Override
-    public void displayRealProgrammerRating(Integer value, Integer colorCode) {
+    public void displayRealProgrammerRating(Integer value) {
         RatingBar rprRatingBar = (RatingBar)findViewById(R.id.rpr_rating_bar_programmer_detail);
         rprRatingBar.setRating(value + 1f);
-        LayerDrawable stars = (LayerDrawable)rprRatingBar.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(this, colorCode), PorterDuff.Mode.SRC_ATOP);
+//        LayerDrawable stars = (LayerDrawable)rprRatingBar.getProgressDrawable();
+//        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(this, colorCode), PorterDuff.Mode.SRC_ATOP);
     }
 
 

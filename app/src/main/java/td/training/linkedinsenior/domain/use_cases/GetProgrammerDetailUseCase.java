@@ -1,26 +1,28 @@
 package td.training.linkedinsenior.domain.use_cases;
 
 import td.training.linkedinsenior.domain.EntityGateway;
-import td.training.linkedinsenior.domain.ProgrammerListPresentation;
+import td.training.linkedinsenior.domain.UseCase;
+
+import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-public class GetProgrammerDetailUseCase {
+public class GetProgrammerDetailUseCase implements UseCase {
 
-    private EntityGateway entityGateway;
+    @Inject EntityGateway entityGateway;
+    private String mId;
+    private WeakReference<SingleProgrammerHandler> mHandler;
 
-
-    @Inject
-    public GetProgrammerDetailUseCase(EntityGateway entityGateway) {
+    public GetProgrammerDetailUseCase(EntityGateway entityGateway, String id, SingleProgrammerHandler handler) {
         this.entityGateway = entityGateway;
+        mId = id;
+        mHandler = new WeakReference<>(handler);
     }
 
-    public void getProgrammer(String id) {
-
+    @Override
+    public void execute() {
+        if (mHandler.get() != null) {
+            mHandler.get().handleSingleProgrammer(entityGateway.fetchProgrammer(mId));
+        }
     }
-
-    public void setPresenter(ProgrammerListPresentation presenter) {
-//        this.presenter = new WeakReference<>(presenter);
-    }
-
 }

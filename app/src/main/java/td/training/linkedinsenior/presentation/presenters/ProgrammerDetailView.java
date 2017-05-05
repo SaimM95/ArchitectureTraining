@@ -9,5 +9,5 @@ public interface ProgrammerDetailView {
     void setUpFavorite(Boolean favorite);
     void displayEmacs(String emacsLabel);
     void displayCaffeine(String caffeineLabel);
-    void displayRealProgrammerRating(Integer value, Integer colorCode);
+    void displayRealProgrammerRating(Integer value);
 }

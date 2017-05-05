@@ -7,7 +7,6 @@ import td.training.linkedinsenior.platform.dependency_injection.DaggerNewProgram
 import td.training.linkedinsenior.platform.dependency_injection.DaggerProgrammerDetailComponent;
 import td.training.linkedinsenior.platform.dependency_injection.DaggerProgrammersListComponent;
 import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayComponent;
-import td.training.linkedinsenior.platform.dependency_injection.EntityGatewayModule;
 import td.training.linkedinsenior.platform.dependency_injection.NewProgrammerComponent;
 import td.training.linkedinsenior.platform.dependency_injection.ProgrammerDetailComponent;
 import td.training.linkedinsenior.platform.dependency_injection.ProgrammerDetailModule;

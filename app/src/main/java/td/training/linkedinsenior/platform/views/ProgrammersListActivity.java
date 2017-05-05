@@ -73,12 +73,7 @@ public class ProgrammersListActivity extends AppCompatActivity implements Progra
         connector = new ProgrammersListConnector();
 
         ApplicationServiceLocator serviceProvider = (ApplicationServiceLocator)getApplication();
-
-        DaggerProgrammersListComponent.builder()
-            .programmersListModule(new ProgrammersListModule())
-            .entityGatewayComponent(serviceProvider.getEntityGatewayComponent())
-            .build()
-            .inject(this);
+        serviceProvider.getProgrammersListComponent().inject(this);
 
         presenter.setProgrammersListView(this);
     }

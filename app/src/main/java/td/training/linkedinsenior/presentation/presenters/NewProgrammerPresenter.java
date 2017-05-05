@@ -1,11 +1,10 @@
 package td.training.linkedinsenior.presentation.presenters;
 
 import android.text.TextUtils;
-import android.widget.Toast;
 
+import td.training.linkedinsenior.domain.UseCase;
 import td.training.linkedinsenior.domain.models.ProgrammerRequest;
-import td.training.linkedinsenior.domain.models.ProgrammerResponse;
-import td.training.linkedinsenior.domain.use_cases.SaveProgrammerUseCase;
+import td.training.linkedinsenior.domain.UseCaseFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.Observable;
@@ -13,14 +12,14 @@ import java.util.Observer;
 
 import javax.inject.Inject;
 
-public class NewProgrammerPresenter implements Observer {
+public class NewProgrammerPresenter implements Observer, UseCase.CompletionHandler {
 
-    private SaveProgrammerUseCase useCase;
+    private UseCaseFactory useCase;
     private WeakReference<NewProgrammerView> view;
     private ProgrammerRequest mProgrammerRequest;
 
     @Inject
-    public NewProgrammerPresenter(SaveProgrammerUseCase useCase) {
+    public NewProgrammerPresenter(UseCaseFactory useCase) {
         this.useCase = useCase;
 
         mProgrammerRequest = new ProgrammerRequest();
@@ -35,7 +34,8 @@ public class NewProgrammerPresenter implements Observer {
     }
 
     public void save() {
-        useCase.save(mProgrammerRequest);
+        UseCase saveUseCase = useCase.saveProgrammerUseCase(mProgrammerRequest, this);
+        saveUseCase.execute();
     }
 
     public void setView(NewProgrammerView view) {
@@ -65,5 +65,10 @@ public class NewProgrammerPresenter implements Observer {
             view.get().updateSaveButton(name != null && !TextUtils.isEmpty(name));
             view.get().setRealProgrammerRating(mProgrammerRequest.getRealProgrammerRating());
         }
+    }
+
+    @Override
+    public void handleCompletion() {
+        // save completed
     }
 }

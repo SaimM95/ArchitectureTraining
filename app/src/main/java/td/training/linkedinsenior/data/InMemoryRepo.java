@@ -20,6 +20,18 @@ public class InMemoryRepo extends Observable implements EntityGateway {
     }
 
     @Override
+    public Programmer fetchProgrammer(String id) {
+        Programmer result = null;
+        for (Programmer programmer: programmers) {
+            if (programmer.getId().equals(id)) {
+                result = programmer;
+                break;
+            }
+        }
+        return result;
+    }
+
+    @Override
     public void createNewProgrammer(Programmer programmer) {
         programmers.add(programmer);
         setChanged();
